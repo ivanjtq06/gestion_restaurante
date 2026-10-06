@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h2>Nuevo pedido</h2>
+    </div>
+    <div class="card-body">
+        <form action="" method="POST">
+            <div class="mb-3">
+                <label for="" class="form-label">Mesa</label>
+                <select name="mesa_id" class="form-select" required>
+                    <option value="">--- Seleccione una mesa ---</option>
+                    {% for item in mesas %}
+                    <option value="{{ item.id }}">{{ item.mesa }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="" class="form-label">Plato</label>
+                <select name="plato_id" class="form-select" required>
+                    <option value="">--- Seleccione un plato ---</option>
+                    {% for item in platos %}
+                    <option value="{{ item.id }}">{{ item.nombre }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="" class="form-label">Cantidad</label>
+                <input type="number" class="form-control" name="cantidad" required>
+            </div>
+            <div class="mb-3">
+                <label for="" class="form-label">Hora</label>
+                <input type="time" class="form-control" name="hora" required>
+            </div>
+            <div class="mb-3">
+                <label for="" class="form-label">Estado</label>
+                <select name="estado" class="form-select" required>
+                    <option value="">--- Seleccione un estado ---</option>
+                    <option value="Pendiente">Pendiente</option>
+                    <option value="Servido">Servido</option>
+                    <option value="Pagado">Pagado</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Guardar</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

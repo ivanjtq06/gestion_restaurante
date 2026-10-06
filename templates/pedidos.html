@@ -2,6 +2,7 @@
 
 {% block content %}
 <h1>Pedidos</h1>
+<a href="{{ url_for('nuevo_pedido') }}" class="btn btn-success">Nuevo</a>
 <table class="table table-striped table-hover">
     <thead class="table-dark">
         <tr>
@@ -23,7 +24,11 @@
             <td>{{ item.cantidad }}</td>
             <td>{{ item.hora }}</td>
             <td>{{ item.estado }}</td>
-            <td></td>
+            <td>
+                <a href="{{ url_for('eliminar_pedido', id=item.id) }}"
+                class="btn btn-danger" onclick="return(confirm('Esta seguro ??') )
+                ">Eliminar</a>
+            </td>
         </tr>
         {% endfor %}
     </tbody>

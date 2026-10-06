@@ -34,6 +34,54 @@ def listar_pedidos():
     conn.close()
     return render_template('pedidos.html', pedidos=pedidos)
 
+
+@app.route("/pedido/nuevo",methods=['GET','POST'])
+def nuevo_pedido():
+    conn = get_db_connection()
+    # En caso de que sea POST, consolidar el pedido
+    if request.method == 'POST':
+        cantidad = request.form['cantidad']
+        hora = request.form['hora']
+        estado = request.form['estado']
+        mesa_id = request.form['mesa_id']
+        plato_id = request.form['plato_id']
+        
+        conn.execute(
+            """
+            INSERT INTO pedidos
+            (cantidad, hora, estado, mesa_id, plato_id)
+            VALUES (?,?,?,?,?)
+            """, (cantidad, hora, estado, mesa_id, plato_id)
+        )
+        conn.commit()
+        conn.close()
+        return redirect(url_for('listar_pedidos'))
+    # En caso de GET Enviar datos para mostrar el formulario de pedido
+    mesas = conn.execute(
+        """
+        SELECT id, numero || ' - ' || ubicacion as mesa
+        FROM mesas
+        """
+    ).fetchall()
+    platos = conn.execute(
+        """
+        SELECT id, nombre FROM platos
+        """
+    ).fetchall()
+    conn.close()
+    return render_template('form_pedido.html',mesas=mesas,platos=platos)
+
+
+
+@app.route('/pedido/eliminar/<int:id>')
+def eliminar_pedido(id):
+    conn = get_db_connection()
+    conn.execute("DELETE FROM pedidos WHERE id =?",(id,))
+    conn.commit()
+    conn.close()
+    return redirect(url_for('listar_pedidos'))
+
+
 @app.route("/platos")
 def listar_platos():
     conn = get_db_connection()
@@ -94,6 +142,13 @@ def listar_mesas():
     mesas = conn.execute('SELECT * FROM mesas').fetchall()
     conn.close()
     return render_template('mesas.html', mesas=mesas)
+
+
+
+
+
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)
